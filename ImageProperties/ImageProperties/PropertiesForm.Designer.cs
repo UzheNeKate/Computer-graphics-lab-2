@@ -55,13 +55,13 @@ namespace ImageProperties
             this.Resolution,
             this.ColorDepth,
             this.Compression});
-            this.dgImages.Location = new System.Drawing.Point(9, 10);
-            this.dgImages.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dgImages.Location = new System.Drawing.Point(12, 12);
+            this.dgImages.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dgImages.Name = "dgImages";
             this.dgImages.ReadOnly = true;
             this.dgImages.RowHeadersWidth = 9;
             this.dgImages.RowTemplate.Height = 24;
-            this.dgImages.Size = new System.Drawing.Size(734, 533);
+            this.dgImages.Size = new System.Drawing.Size(979, 656);
             this.dgImages.TabIndex = 0;
             // 
             // FileName
@@ -112,10 +112,10 @@ namespace ImageProperties
             // btOpenFolder
             // 
             this.btOpenFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btOpenFolder.Location = new System.Drawing.Point(438, 548);
-            this.btOpenFolder.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btOpenFolder.Location = new System.Drawing.Point(820, 674);
+            this.btOpenFolder.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btOpenFolder.Name = "btOpenFolder";
-            this.btOpenFolder.Size = new System.Drawing.Size(128, 28);
+            this.btOpenFolder.Size = new System.Drawing.Size(171, 34);
             this.btOpenFolder.TabIndex = 1;
             this.btOpenFolder.Text = "Choose Folder...";
             this.btOpenFolder.UseVisualStyleBackColor = true;
@@ -125,23 +125,22 @@ namespace ImageProperties
             // 
             this.lbSelectedPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lbSelectedPath.AutoSize = true;
-            this.lbSelectedPath.Location = new System.Drawing.Point(646, 556);
-            this.lbSelectedPath.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbSelectedPath.Location = new System.Drawing.Point(9, 683);
             this.lbSelectedPath.Name = "lbSelectedPath";
-            this.lbSelectedPath.Size = new System.Drawing.Size(97, 13);
+            this.lbSelectedPath.Size = new System.Drawing.Size(121, 16);
             this.lbSelectedPath.TabIndex = 2;
             this.lbSelectedPath.Text = "Nothing is selected";
             // 
             // PropertiesForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(754, 586);
+            this.ClientSize = new System.Drawing.Size(1005, 721);
             this.Controls.Add(this.lbSelectedPath);
             this.Controls.Add(this.btOpenFolder);
             this.Controls.Add(this.dgImages);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.MinimumSize = new System.Drawing.Size(304, 251);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MinimumSize = new System.Drawing.Size(399, 298);
             this.Name = "PropertiesForm";
             this.Text = "Properties";
             ((System.ComponentModel.ISupportInitialize)(this.dgImages)).EndInit();

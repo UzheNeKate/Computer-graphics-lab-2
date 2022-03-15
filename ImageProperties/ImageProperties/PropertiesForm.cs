@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MetadataExtractor;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -67,21 +68,74 @@ namespace ImageProperties
                                     .ToList();
             foreach (FileInfo file in files)
             {
-                var image = Image.FromFile(file.FullName);
-                dgImages.Rows.Add(new object[] {
-                    file.Name,
-                    image.Size.Width.ToString() + "X" + image.Size.Height.ToString(),
-                    image.HorizontalResolution + "X" + image.VerticalResolution,
-                    Image.GetPixelFormatSize(image.PixelFormat),
-                    GetCompressionType(new Bitmap(file.FullName))
-                });
+                if (file.Extension != ".pcx")
+                {
+                    var image = Image.FromFile(file.FullName);
+                    dgImages.Rows.Add(new object[] {
+                        file.Name,
+                        image.Size.Width.ToString() + "X" + image.Size.Height.ToString(),
+                        image.HorizontalResolution + "X" + image.VerticalResolution,
+                        Image.GetPixelFormatSize(image.PixelFormat),
+                        GetCompressionType(image)
+                    });
+                }
+                else
+                {
+                    dgImages.Rows.Add(GetPcxMetadata(file));
+                }
+            }
+        }
+
+        private object[] GetPcxMetadata(FileInfo file)
+        {
+            var directories = ImageMetadataReader.ReadMetadata(file.FullName);
+            var metadata = new Dictionary<string, string>();
+
+            byte[] bytes = new byte[3];
+            using (var reader = new BinaryReader(new FileStream(file.FullName, FileMode.Open)))
+            {
+                reader.Read(bytes, 0, 3);
+            }
+            var isCompressed = bytes[2] == 1;
+
+            foreach (var directory in directories)
+            {
+                foreach (var tag in directory.Tags)
+                {
+                    metadata[$"{directory.Name} - {tag.Name}"] = tag.Description;
+                }
+            }
+
+            return new string[]
+            {
+                file.Name,
+                CalcPcxSize(metadata["PCX - X Min"], metadata["PCX - X Max"],  
+                            metadata["PCX - Y Min"], metadata["PCX - Y Max"]),
+                $"{metadata["PCX - Horizontal DPI"]}X{metadata["PCX - Vertical DPI"]}",
+                metadata["PCX - Color Planes"],
+                isCompressed ? "RLE" : "No compression"
+            };
+        }
+
+        private string CalcPcxSize(string xMinStr, string xMaxStr, string yMinStr, string yMaxStr)
+        {
+            try
+            {
+                var xMin = int.Parse(xMinStr);
+                var xMax = int.Parse(xMaxStr);
+                var yMin = int.Parse(yMinStr);
+                var yMax = int.Parse(yMaxStr);
+                return $"{xMax - xMin + 1}X{yMax - yMin + 1}";
+            }
+            catch (Exception)
+            {
+                return "Cannot get size";
             }
         }
 
         private string GetCompressionType(Image image)
         {
-            var compressionId = -1;
-            var compressionType = string.Empty;
+            int compressionId;
             try
             {
                 compressionId = BitConverter.ToInt16(image.GetPropertyItem(0x0103).Value, 0);
@@ -90,7 +144,7 @@ namespace ImageProperties
             {
                 return "Cannot get compression info";
             }
-            if(!CompressionTypes.TryGetValue(compressionId, out compressionType))
+            if(!CompressionTypes.TryGetValue(compressionId, out var compressionType))
             {
                 return "Undefined compression type";
             }
